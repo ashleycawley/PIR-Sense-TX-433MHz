@@ -14,7 +14,7 @@ trap 'echo "4" > /sys/class/gpio/unexport' 0
 stat=`cat /sys/class/gpio/gpio4/value`
 }
 function CHECKDELAY {
-sleep 1
+sleep 3
 }
 
 # Main Script Begins
