@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Sudo Code
-# If movement is detected then send 433MHz ON signal to monitors
-# If NO movement is deteced at any point during an extended period (15mins) send 433MHz OFF signal to monitors
-
-# Only need to run once:
-echo "4" > /sys/class/gpio/export
-echo "in" > /sys/class/gpio/gpio4/direction
+# This script is designed to run continuously, it uses a PIR motion sensor to detect
+# movement and when it does it sends a wireless signal via a 433MHz Transmitter to
+# switch on a remote controlled plug. This proof of concept is currently being used
+# to automatically switch on my multi-monitor setup when I enter my office but could
+# be utilised to perform other tasks instead.
 
 # Functions
 function READING {
@@ -19,8 +17,15 @@ sleep 3
 
 # Main Script Begins
 
-while true; do
+echo -e "\f" # Clears the screen
 
+if [ `whoami` == 'root' ]
+then
+	# Sets up GPIO Pins and gets ready to take PIR sensor readings
+	echo "4" > /sys/class/gpio/export
+	echo "in" > /sys/class/gpio/gpio4/direction
+
+	while true; do
 
 	READING && echo "Sensor Detects: $stat" && echo # Checks Motion Sensor and saves either a 1 (movement) or 0 (no movement) to $stat
 
@@ -41,7 +46,10 @@ while true; do
 	done
 
 
-	echo "Nothing..." && echo
-	CHECKDELAY
-done
-exit 0
+		echo "Nothing..." && echo
+		CHECKDELAY
+	done
+	exit 0
+fi
+echo "You are not root - please run this script using sudo or as root."
+exit 1
