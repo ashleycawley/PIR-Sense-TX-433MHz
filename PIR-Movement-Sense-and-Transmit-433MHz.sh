@@ -38,7 +38,9 @@ then
 		echo '| |\/| | | | || | | |  __|| |\/| ||  __|| . ` | | |'
 		echo '| |  | \ \_/ /\ \_/ / |___| |  | || |___| |\  | | |'
 		echo "\_|  |_/\___/  \___/\____/\_|  |_/\____/\_| \_/ \_/ detected at `date +%F_%T`" && echo
-
+		
+		# Add an entry to the movement.log to log that there has been movement detected
+		echo "Movement detected at `date +%F_%T`" >> ./movement.log && echo >> ./movement.log
 
 		cd /home/acawley/433MHz/433Utils/RPi_utils/ && sudo ./codesend 4706319
 		READING
